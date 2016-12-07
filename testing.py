@@ -3,7 +3,7 @@
 import pandas as pd
 import numpy as np
 from scipy.stats import poisson
+import json
 
-df = pd.read_csv('E_P_2002.csv', delimiter=',', low_memory=False, error_bad_lines=False)
-
-print df
+dict = json.loads(open('match_db.json').read())
+print dict
