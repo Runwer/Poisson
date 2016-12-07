@@ -29,6 +29,7 @@ def match_data(soup, url):
         dict['teamA'] = \
         soup.find('div', {'class': 'block_match_info real-content clearfix '}).find_all('h3', {'class': 'thick'})[
             1].findNext('a').string
+    dict['date'] = str(dict['date'])
     return dict
 
 def find_links(url, old_urls, todo_urls):
@@ -57,7 +58,6 @@ i = 0
 while True:
     #try:
     temp = url_to_crawl.pop()
-    print temp
     url_crawled.append(temp)
     url_to_crawl = url_to_crawl + find_links(temp, url_crawled, url_to_crawl)
     #except:
@@ -65,13 +65,14 @@ while True:
     #    break
     i += 1
     print i
-    if i > 10:
-        #with open('crawled.json', 'wb') as outfile:
-        #    json.dump(url_crawled, outfile)
-        #with open('to_crawl.json', 'wb') as outfile:
-        #    json.dump(url_to_crawl, outfile)
-        #with open('match_db.json', 'w') as fp:
-        #    json.dump(match_db, fp)
+    if i%10 == 0:
+        with open('crawled.json', 'wb') as outfile:
+            json.dump(url_crawled, outfile)
+        with open('to_crawl.json', 'wb') as outfile:
+            json.dump(url_to_crawl, outfile)
+        with open('match_db.json', 'w') as fp:
+            json.dump(match_db, fp)
+    if i > 1000:
         break
 
 
