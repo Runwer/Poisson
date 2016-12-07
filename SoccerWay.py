@@ -9,6 +9,23 @@ def getpage(url):
     page = urllib2.urlopen(url)
     return page.read()
 
+def match_data(soup):
+    dict = {'finalscore': soup.find('h3', {'class': 'thick scoretime '}).string.strip(), 'scores': []}
+
+    goals = soup.find('div', {'id': 'page_match_1_block_match_goals_13-wrapper'})
+
+    for g in goals.find_all('tr', {'class': 'event    expanded'}):
+        dict['scores'].append(
+            {g.find('span', {'class': 'minute'}).string: g.find('td', {'class': 'event-icon'}).string})
+
+    dict['teamH'] = soup.find('div', {'class': 'block_match_info real-content clearfix '}).find('h3', {
+        'class': 'thick'}).findNext('a').string
+    dict['teamA'] = \
+    soup.find('div', {'class': 'block_match_info real-content clearfix '}).find_all('h3', {'class': 'thick'})[
+        1].findNext('a').string
+    dict['date'] = soup.find('div', {'class': 'block_match_info real-content clearfix '}).find('span', {
+        'class': 'timestamp'}).string
+    return dict
 def find_links(url, old_urls, todo_urls):
     new_urls = []
     page = getpage(urlparse.urljoin('http://www.soccerway.com', url))
@@ -22,7 +39,7 @@ def find_links(url, old_urls, todo_urls):
     if '/matches/20' in url:
         find_id = page.find('data-matchids="')
         matchid = page[find_id+15: page.find('"', find_id+15)]
-        match_db[matchid] =0
+        match_db[matchid] = match_data(soup)
     return new_urls
 
 url_crawled = json.loads(open('crawled.json').read())
