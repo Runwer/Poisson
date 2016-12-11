@@ -52,7 +52,7 @@ def find_links(url, old_urls, todo_urls):
         for t in ['/?', '/map/', '/venue/', '/head2head/', '/#events', '/commentary/']:
             if t in tempTag:
                 tempTag = tempTag[:tempTag.find(t[1:])]
-        if ('england/premier-league' in tempTag or '/teams/england' in tempTag) and ('/statistics/' not in tempTag and '/venue' not in tempTag and '/transfer' not in tempTag) and (tempTag not in old_urls and tempTag not in todo_urls and tempTag not in new_urls) and all('/'+str(x)+'/' not in tempTag for x in match_db.keys()):
+        if ('england/premier-league/' in tempTag or '/teams/england' in tempTag) and ('/statistics/' not in tempTag and '/venue' not in tempTag and '/transfer' not in tempTag) and (tempTag not in old_urls and tempTag not in todo_urls and tempTag not in new_urls) and all('/'+str(x)+'/' not in tempTag for x in match_db.keys()):
             new_urls.append(tempTag)
     if '/matches/20' in url and '/head2head/' not in url and '/commentary/' not in url and '/map/' not in url and 'venue' not in url and '#events' not in url:
         print url
@@ -99,7 +99,7 @@ while True:
     #    break
     i += 1
     print i
-    if i%10 == 0:
+    if i%1 == 0:
         with open('crawled.json', 'wb') as outfile:
             json.dump(url_crawled, outfile)
         with open('to_crawl.json', 'wb') as outfile:
